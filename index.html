@@ -7,430 +7,328 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
         
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --accent: #f59e0b;
+        }
+
         body {
             font-family: 'Noto Sans KR', sans-serif;
             scroll-behavior: smooth;
+            word-break: keep-all;
         }
 
-        .animate-blob {
-            animation: blob 7s infinite;
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
         }
-        .animation-delay-2000 {
-            animation-delay: 2s;
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
+
+        .blob-animation {
+            animation: blob 10s infinite alternate;
+        }
+
         @keyframes blob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
+            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            100% { border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%; }
         }
 
-        .break-keep { word-break: keep-all; }
-        
         .loader {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #2563eb;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary);
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .custom-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-white text-slate-900">
 
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-50 border-b border-slate-100">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header & Navigation -->
+    <header class="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center gap-4">
-                    <div id="logo-container" class="relative w-12 h-12 bg-blue-50 rounded-xl overflow-hidden border border-blue-100 flex items-center justify-center">
+                <div class="flex items-center gap-3">
+                    <div id="logo-container" class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white overflow-hidden shadow-lg shadow-blue-200">
                         <div class="loader"></div>
                     </div>
-                    <div class="flex flex-col">
-                        <span class="text-xs font-bold text-blue-600 tracking-wider">오션중학교</span>
-                        <span class="font-extrabold text-xl text-slate-900 tracking-tight leading-none">
-                            선화샘과 <span class="text-blue-600">직업교육</span>
-                        </span>
+                    <div>
+                        <p class="text-[10px] font-black text-blue-600 uppercase tracking-tighter leading-none mb-1">Ocean Middle School</p>
+                        <h1 class="font-black text-lg tracking-tight leading-none">선화샘과 <span class="text-blue-600">직업교육</span></h1>
                     </div>
                 </div>
-                <div class="hidden md:flex space-x-10 text-sm font-bold text-slate-600">
-                    <a href="#about" class="hover:text-blue-600 transition-colors py-2 border-b-2 border-transparent hover:border-blue-600">교육 목표</a>
-                    <a href="#programs" class="hover:text-blue-600 transition-colors py-2 border-b-2 border-transparent hover:border-blue-600">교육 프로그램</a>
-                    <a href="#contact" class="hover:text-blue-600 transition-colors py-2 border-b-2 border-transparent hover:border-blue-600">문의하기</a>
-                </div>
+                
+                <nav class="hidden md:flex items-center gap-8 font-bold text-sm text-slate-500">
+                    <a href="#vision" class="hover:text-blue-600 transition-colors">교육비전</a>
+                    <a href="#programs" class="hover:text-blue-600 transition-colors">프로그램</a>
+                    <a href="#contact" class="px-5 py-2.5 bg-slate-900 text-white rounded-full hover:bg-blue-600 transition-all">상담신청</a>
+                </nav>
+
+                <button class="md:hidden text-2xl" id="mobile-menu-btn">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </button>
             </div>
         </div>
-    </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-b from-blue-50 to-white overflow-hidden border-b border-slate-100">
-        <div class="absolute inset-0 z-0 opacity-20">
-            <div class="absolute top-20 left-10 w-64 h-64 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
-            <div class="absolute top-40 right-10 w-64 h-64 bg-amber-200 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
+    <section class="relative pt-40 pb-24 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10">
+            <div class="absolute top-20 right-0 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-60"></div>
+            <div class="absolute bottom-0 left-0 w-80 h-80 bg-amber-50 rounded-full blur-3xl opacity-60"></div>
         </div>
-        
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-24 pb-28">
-            <div class="text-center max-w-4xl mx-auto">
-                <div class="inline-flex items-center gap-2 py-2 px-4 rounded-full bg-blue-100 text-blue-700 text-sm font-bold mb-8 shadow-sm">
-                    <i class="fa-solid fa-star"></i>
-                    <span>함께 성장하는 오션 진로직업교육</span>
-                </div>
-                
-                <h1 class="text-4xl sm:text-6xl font-black text-slate-900 mb-8 leading-[1.2] break-keep">
-                    아이들의 <span class="text-blue-600 underline decoration-blue-200 underline-offset-8">자립</span>을 향한<br />
-                    따뜻한 <span class="text-amber-600">기다림</span>과 <span class="text-blue-600">도전</span>
-                </h1>
-                
-                <p class="text-lg sm:text-2xl text-slate-600 mb-12 leading-relaxed font-medium break-keep px-4">
-                    발달장애 학생들의 무한한 잠재력을 믿습니다.<br class="hidden md:block" />
-                    사회로 나아가는 당당한 첫걸음,<br class="hidden md:block" />
-                    선화샘이 든든한 길잡이가 되어 함께하겠습니다.
-                </p>
-                
-                <div class="flex flex-col sm:flex-row justify-center gap-5">
-                    <a href="#programs" class="px-10 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl hover:bg-blue-700 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 text-lg">
-                        수업 내용 보기 <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                    <a href="#contact" class="px-10 py-4 bg-white text-slate-700 border-2 border-slate-200 rounded-2xl font-bold shadow-sm hover:bg-slate-50 transition-all flex items-center justify-center text-lg">
-                        상담 문의
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Philosophy Section -->
-    <section id="about" class="py-24 bg-white">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20">
-                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-6">교육의 핵심 가치</h2>
-                <p class="text-slate-500 text-lg">오션중학교 특수학급이 지향하는 세 가지 약속입니다.</p>
-                <div class="w-20 h-1.5 bg-blue-500 mx-auto rounded-full mt-6"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal inline-flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full text-blue-700 text-xs font-black mb-8 border border-blue-100">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                </span>
+                꿈을 요리하고 내일을 조립하는 곳
             </div>
             
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="group bg-slate-50 p-10 rounded-[2.5rem] text-center border border-slate-100 hover:border-blue-200 hover:bg-blue-50 transition-all">
-                    <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform shadow-sm text-3xl">
-                        <i class="fa-solid fa-heart"></i>
-                    </div>
-                    <h3 class="text-2xl font-extrabold mb-4">개별화 교육</h3>
-                    <p class="text-slate-600 leading-relaxed break-keep font-medium">
-                        각자의 속도와 개성을 존중하며<br />
-                        맞춤형 학습 기회를 제공합니다.
-                    </p>
-                </div>
-                
-                <div class="group bg-slate-50 p-10 rounded-[2.5rem] text-center border border-slate-100 hover:border-amber-200 hover:bg-amber-50 transition-all">
-                    <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-3xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform shadow-sm text-3xl">
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h3 class="text-2xl font-extrabold mb-4">자립 성취감</h3>
-                    <p class="text-slate-600 leading-relaxed break-keep font-medium">
-                        작은 성공의 경험을 쌓아<br />
-                        독립적인 삶의 힘을 기릅니다.
-                    </p>
-                </div>
-
-                <div class="group bg-slate-50 p-10 rounded-[2.5rem] text-center border border-slate-100 hover:border-teal-200 hover:bg-teal-50 transition-all">
-                    <div class="w-20 h-20 bg-teal-100 text-teal-600 rounded-3xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform shadow-sm text-3xl">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
-                    <h3 class="text-2xl font-extrabold mb-4">사회성 향상</h3>
-                    <p class="text-slate-600 leading-relaxed break-keep font-medium">
-                        함께 소통하고 협력하며<br />
-                        사회인으로서의 기본을 배웁니다.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Programs Section -->
-    <section id="programs" class="py-24 bg-slate-50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20">
-                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-6">다양한 교육 프로그램</h2>
-                <p class="text-slate-500 text-lg">실제 직무 중심 교육과 일상 자립을 위한 교양 교육을 통합 운영합니다.</p>
-                <div class="w-20 h-1.5 bg-blue-600 mx-auto rounded-full mt-6"></div>
-            </div>
-
-            <div class="space-y-12">
-                
-                <!-- 기초 교과 교양 수업 -->
-                <div class="flex flex-col lg:flex-row bg-white rounded-[3rem] overflow-hidden shadow-xl shadow-slate-200/50 border border-white">
-                    <div class="lg:w-1/2 relative min-h-[400px]">
-                        <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80" alt="기초 교과 교양 수업" class="w-full h-full object-cover" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                        <div class="absolute bottom-8 left-8 bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl font-black text-white border border-white/30 text-xl tracking-wide flex items-center gap-3">
-                            <i class="fa-solid fa-book-open"></i>
-                            오션 배움터
-                        </div>
-                    </div>
-                    <div class="lg:w-1/2 p-10 lg:p-16 flex flex-col justify-center">
-                        <span class="text-indigo-600 font-black text-sm mb-4 tracking-widest uppercase">Academic Course</span>
-                        <h3 class="text-3xl font-black text-slate-900 mb-6 leading-tight">기초 교과 및 교양 교육</h3>
-                        <p class="text-slate-600 mb-10 leading-[1.8] break-keep text-lg font-medium">
-                            세상과 소통하는 기초 체력 기르기.<br />
-                            읽고 쓰는 즐거움부터 실생활에 필요한 숫자 계산까지<br />
-                            자립적인 일상을 위한 핵심 교과를 재미있게 학습합니다.
-                        </p>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
-                                <i class="fa-solid fa-pen-nib text-indigo-500"></i>
-                                <span>읽기 및 쓰기</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
-                                <i class="fa-solid fa-calculator text-indigo-500"></i>
-                                <span>생활 수학</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
-                                <i class="fa-solid fa-language text-indigo-500"></i>
-                                <span>기초 영어</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
-                                <i class="fa-solid fa-lightbulb text-indigo-500"></i>
-                                <span>상식 및 인문</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 바리스타 실무 교육 -->
-                <div class="flex flex-col lg:flex-row-reverse bg-white rounded-[3rem] overflow-hidden shadow-xl shadow-slate-200/50 border border-white">
-                    <div class="lg:w-1/2 relative min-h-[400px]">
-                        <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80" alt="바리스타 수업" class="w-full h-full object-cover" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                        <div class="absolute bottom-8 right-8 bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl font-black text-white border border-white/30 text-xl tracking-wide flex items-center gap-3">
-                            <i class="fa-solid fa-mug-hot"></i>
-                            오션 카페
-                        </div>
-                    </div>
-                    <div class="lg:w-1/2 p-10 lg:p-16 flex flex-col justify-center">
-                        <span class="text-amber-600 font-black text-sm mb-4 tracking-widest uppercase">Service Course</span>
-                        <h3 class="text-3xl font-black text-slate-900 mb-6 leading-tight">바리스타 실무 교육</h3>
-                        <p class="text-slate-600 mb-10 leading-[1.8] break-keep text-lg font-medium">
-                            커피 향을 통해 배우는 소통의 기술.<br />
-                            머신 조작부터 위생 관리, 미소 띤 응대까지<br />
-                            실전 카페 환경에서 전문적인 직무를 습득합니다.
-                        </p>
-                        <div class="grid gap-4">
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                <i class="fa-solid fa-circle-check text-amber-500"></i>
-                                <span>청결한 위생 관리 학습</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                <i class="fa-solid fa-circle-check text-amber-500"></i>
-                                <span>에스프레소 추출 및 음료 제조</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                <i class="fa-solid fa-circle-check text-amber-500"></i>
-                                <span>주문 및 고객 응대 예절</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 기초 조립 및 임가공 -->
-                <div class="flex flex-col lg:flex-row bg-white rounded-[3rem] overflow-hidden shadow-xl shadow-slate-200/50 border border-white">
-                    <div class="lg:w-1/2 relative min-h-[400px]">
-                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80" alt="기초 조립 수업" class="w-full h-full object-cover" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                        <div class="absolute bottom-8 left-8 bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl font-black text-white border border-white/30 text-xl tracking-wide flex items-center gap-3">
-                            <i class="fa-solid fa-gears"></i>
-                            오션 공방
-                        </div>
-                    </div>
-                    <div class="lg:w-1/2 p-10 lg:p-16 flex flex-col justify-center">
-                        <span class="text-teal-600 font-black text-sm mb-4 tracking-widest uppercase">Production Course</span>
-                        <h3 class="text-3xl font-black text-slate-900 mb-6 leading-tight">기초 조립 및 임가공</h3>
-                        <p class="text-slate-600 mb-10 leading-[1.8] break-keep text-lg font-medium">
-                            정교한 작업으로 기르는 성취감.<br />
-                            도구를 사용한 부품 조립과 공정 이해를 통해<br />
-                            집중력과 올바른 작업 태도를 훈련합니다.
-                        </p>
-                        <div class="grid gap-4">
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                <i class="fa-solid fa-circle-check text-teal-500"></i>
-                                <span>소근육 발달 및 도구 사용</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                <i class="fa-solid fa-circle-check text-teal-500"></i>
-                                <span>작업 공정별 순서 학습</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                <i class="fa-solid fa-circle-check text-teal-500"></i>
-                                <span>불량품 선별 및 결과물 관리</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 정보화 교육 -->
-                <div class="flex flex-col lg:flex-row-reverse bg-white rounded-[3rem] overflow-hidden shadow-xl shadow-slate-200/50 border border-white">
-                    <div class="lg:w-1/2 relative min-h-[400px]">
-                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80" alt="기초 정보화 교육" class="w-full h-full object-cover" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                        <div class="absolute bottom-8 right-8 bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl font-black text-white border border-white/30 text-xl tracking-wide flex items-center gap-3">
-                            <i class="fa-solid fa-desktop"></i>
-                            오션 디지털룸
-                        </div>
-                    </div>
-                    <div class="lg:w-1/2 p-10 lg:p-16 flex flex-col justify-center">
-                        <span class="text-blue-600 font-black text-sm mb-4 tracking-widest uppercase">Digital Course</span>
-                        <h3 class="text-3xl font-black text-slate-900 mb-6 leading-tight">기초 정보화 교육</h3>
-                        <p class="text-slate-600 mb-10 leading-[1.8] break-keep text-lg font-medium">
-                            스마트한 세상과 소통하는 능력.<br />
-                            PC 조작부터 생활 밀착형 디지털 기기 활용까지<br />
-                            일상의 자립을 위한 IT 교육을 실시합니다.
-                        </p>
-                        <div class="grid gap-4">
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                <i class="fa-solid fa-circle-check text-blue-500"></i>
-                                <span>PC 기본 조작 및 타이핑 연습</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                <i class="fa-solid fa-circle-check text-blue-500"></i>
-                                <span>키오스크 및 모바일 앱 활용</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-800 font-bold bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                <i class="fa-solid fa-circle-check text-blue-500"></i>
-                                <span>사무 보조 기초 문서 작성</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Teacher's Message -->
-    <section class="py-32 bg-blue-700 text-white relative overflow-hidden">
-        <div class="absolute top-0 right-0 opacity-10 translate-x-1/4 -translate-y-1/4">
-            <i class="fa-solid fa-heart text-[600px]"></i>
-        </div>
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <i class="fa-solid fa-quote-left text-6xl text-blue-300 mb-10 opacity-50"></i>
-            <p class="text-2xl sm:text-4xl font-black leading-[1.6] mb-12 break-keep">
-                "우리 아이들의 변화는 아주 작은 것에서 시작됩니다.<br />
-                느리지만 분명하게 나아가는 그 걸음걸음에<br />
-                가장 든든한 동반자가 되어 주겠습니다."
+            <h2 class="reveal text-4xl sm:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.15] mb-8">
+                천천히 걷더라도<br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">올바른 방향</span>으로
+            </h2>
+            
+            <p class="reveal text-lg sm:text-xl text-slate-500 max-w-3xl mx-auto mb-12 font-medium leading-relaxed">
+                오션중학교 특수학급은 발달장애 학생들이 사회의 당당한 구성원으로<br class="hidden sm:block" />
+                성장할 수 있도록 실질적인 직업 훈련과 따뜻한 정서 교육을 실천합니다.
             </p>
-            <div class="inline-block px-8 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 font-bold text-xl">
-                오션중학교 특수교육반 선화샘 드림
+
+            <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#programs" class="w-full sm:w-auto px-10 py-5 bg-blue-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-blue-200 hover:-translate-y-1 transition-all">
+                    수업 커리큘럼 보기
+                </a>
+                <a href="#contact" class="w-full sm:w-auto px-10 py-5 bg-white text-slate-700 border-2 border-slate-100 rounded-2xl font-black text-lg hover:bg-slate-50 transition-all">
+                    상담 채널
+                </a>
             </div>
+        </div>
+    </section>
+
+    <!-- Vision Cards -->
+    <section id="vision" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="reveal bg-white p-10 rounded-[2.5rem] border border-slate-100 custom-shadow">
+                    <div class="w-14 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-2xl mb-8 shadow-lg shadow-blue-100">
+                        <i class="fa-solid fa-hands-holding-child"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 tracking-tight">개인별 맞춤 속도</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">단 한 명의 아이도 소외되지 않도록 개인의 역량과 속도에 맞춘 1:1 개별화 교육을 지향합니다.</p>
+                </div>
+                <div class="reveal bg-white p-10 rounded-[2.5rem] border border-slate-100 custom-shadow" style="transition-delay: 0.1s;">
+                    <div class="w-14 h-14 bg-amber-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-8 shadow-lg shadow-amber-100">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 tracking-tight">현장 중심 직무</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">이론에 그치지 않고 카페, 공방 등 실제 작업 환경과 유사한 공간에서 실무 능력을 키웁니다.</p>
+                </div>
+                <div class="reveal bg-white p-10 rounded-[2.5rem] border border-slate-100 custom-shadow" style="transition-delay: 0.2s;">
+                    <div class="w-14 h-14 bg-teal-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-8 shadow-lg shadow-teal-100">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 tracking-tight">정서적 자립</h3>
+                    <p class="text-slate-500 leading-relaxed font-medium">기술 습단뿐만 아니라 타인과 소통하고 공감하는 능력을 길러 진정한 사회적 자립을 돕습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Program Sections Container -->
+    <section id="programs" class="py-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-3xl sm:text-5xl font-black mb-6 tracking-tight">우리가 배우는 <span class="text-blue-600">내일</span></h2>
+                <p class="text-slate-500 text-lg font-medium">단계별 성장을 위한 오션중학교만의 특성화 프로그램</p>
+            </div>
+
+            <div id="program-list" class="space-y-32">
+                <!-- JavaScript will inject programs here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote -->
+    <section class="py-24 bg-slate-900 text-white overflow-hidden relative">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div class="max-w-5xl mx-auto px-4 text-center relative z-10">
+            <div class="reveal mb-10 text-blue-500 text-5xl opacity-50">
+                <i class="fa-solid fa-quote-left"></i>
+            </div>
+            <h3 class="reveal text-2xl sm:text-4xl font-black leading-relaxed mb-10">
+                "세상은 결과로 아이들을 평가하지만,<br />
+                교사는 아이들이 견뎌온 <span class="text-blue-400">과정</span>을 믿어줍니다."
+            </h3>
+            <div class="reveal w-20 h-1 bg-blue-600 mx-auto mb-8"></div>
+            <p class="reveal font-bold text-slate-400 tracking-widest uppercase text-sm">오션중학교 특수교사 선화샘</p>
         </div>
     </section>
 
     <!-- Contact Section -->
     <section id="contact" class="py-24 bg-white">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-slate-900 rounded-[3rem] p-10 md:p-20 shadow-2xl text-white flex flex-col lg:flex-row items-center gap-16">
-                <div class="lg:w-1/2">
-                    <h2 class="text-4xl font-black mb-8 leading-tight">마음과 마음을<br />잇는 소통 채널</h2>
-                    <p class="text-slate-400 text-xl mb-12 leading-relaxed break-keep font-medium">
-                        아이의 성장에 대해 궁금한 점이 있으신가요?<br />
-                        선화샘은 언제나 열려 있습니다.<br />
-                        따뜻한 상담과 소통으로 함께 고민하겠습니다.
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-16 items-start">
+                <div class="lg:w-1/3 reveal">
+                    <h2 class="text-4xl font-black mb-8 tracking-tight">함께 고민하고<br />함께 나아갑니다</h2>
+                    <p class="text-slate-500 mb-12 font-medium leading-relaxed">
+                        교육 상담, 입학 문의 또는 단순한 격려의 메시지도 좋습니다. 우리 아이들을 위한 소중한 한마디를 남겨주세요.
                     </p>
-                    
                     <div class="space-y-6">
-                        <div class="flex items-center gap-6">
-                            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-blue-400 border border-white/10">
-                                <i class="fa-solid fa-location-dot"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-slate-500 uppercase tracking-widest">학교 위치</p>
-                                <p class="text-lg font-bold">부산광역시 오션중학교 특수학급 (진로직업실)</p>
-                            </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600"><i class="fa-solid fa-phone"></i></div>
+                            <span class="font-bold">051-609-1772</span>
                         </div>
-                        <div class="flex items-center gap-6">
-                            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-blue-400 border border-white/10">
-                                <i class="fa-solid fa-phone"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-slate-500 uppercase tracking-widest">문의 전화</p>
-                                <p class="text-lg font-bold">051-609-1772</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-6">
-                            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-blue-400 border border-white/10">
-                                <i class="fa-solid fa-envelope"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-slate-500 uppercase tracking-widest">이메일</p>
-                                <p class="text-lg font-bold">teacher@ocean.ms.kr</p>
-                            </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600"><i class="fa-solid fa-location-dot"></i></div>
+                            <span class="font-bold">부산광역시 강서구 명지국제도시</span>
                         </div>
                     </div>
                 </div>
-                
-                <div class="lg:w-1/2 w-full">
-                    <form class="bg-white p-10 rounded-[2.5rem] shadow-xl text-slate-900" id="contact-form">
-                        <h3 class="font-black text-2xl mb-8 flex items-center gap-3">
-                            <i class="fa-solid fa-paper-plane text-blue-600"></i>
-                            온라인 상담 요청
-                        </h3>
-                        <div class="space-y-6">
-                            <div>
-                                <label class="block text-sm font-black text-slate-700 mb-2">학부모님 성함</label>
-                                <input type="text" required class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none transition-all font-bold" placeholder="성함을 입력해 주세요" />
+
+                <div class="lg:w-2/3 w-full reveal">
+                    <div class="bg-slate-50 p-8 sm:p-12 rounded-[3rem] border border-slate-100">
+                        <form id="contact-form" class="space-y-6">
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">보호자 성함</label>
+                                    <input type="text" required name="name" class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl outline-none focus:border-blue-600 transition-all font-bold" placeholder="홍길동">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">연락처</label>
+                                    <input type="tel" required name="phone" class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl outline-none focus:border-blue-600 transition-all font-bold" placeholder="010-0000-0000">
+                                </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-black text-slate-700 mb-2">연락처</label>
-                                <input type="tel" required class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none transition-all font-bold" placeholder="010-0000-0000" />
+                                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">상담 내용</label>
+                                <textarea rows="4" required name="message" class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl outline-none focus:border-blue-600 transition-all font-bold" placeholder="아이의 성장에 대해 궁금한 점을 적어주세요."></textarea>
                             </div>
-                            <div>
-                                <label class="block text-sm font-black text-slate-700 mb-2">문의 내용</label>
-                                <textarea rows="4" required class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none transition-all font-bold" placeholder="아이의 어떤 점이 궁금하신가요?"></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl hover:bg-blue-700 hover:shadow-lg transition-all text-lg shadow-blue-600/20">
-                                상담 신청하기
+                            <button type="submit" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-3">
+                                <span>상담 예약하기</span>
+                                <i class="fa-solid fa-paper-plane"></i>
                             </button>
+                        </form>
+                        <div id="form-success" class="hidden text-center py-10">
+                            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6"><i class="fa-solid fa-check"></i></div>
+                            <h4 class="text-2xl font-black mb-2">신청이 완료되었습니다!</h4>
+                            <p class="text-slate-500 font-medium">선화샘이 최대한 빨리 연락드리겠습니다.</p>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-50 py-16 text-center border-t border-slate-200">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex flex-col items-center gap-6">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-lg">O</div>
-                    <span class="font-black text-xl text-slate-900 tracking-tight">선화샘과 직업교육</span>
-                </div>
-                <p class="text-slate-500 font-bold max-w-md break-keep">
-                    발달장애 학생들의 빛나는 내일을 위해<br />
-                    오늘도 정성을 다해 가르칩니다.
-                </p>
-                <div class="w-full h-px bg-slate-200 max-w-lg"></div>
-                <p class="text-xs font-bold text-slate-400 tracking-widest uppercase">
-                    © <span id="current-year"></span> Ocean Middle School. Design for Progress.
-                </p>
-            </div>
+    <footer class="py-12 bg-white border-t border-slate-100 text-center">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="text-slate-400 text-xs font-black tracking-widest uppercase">
+                &copy; <span id="year"></span> Ocean Middle School Special Class. All rights reserved.
+            </p>
         </div>
     </footer>
 
     <script>
-        // 1. Set current year
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+        // --- Data Layer ---
+        const programs = [
+            {
+                title: "기초 교과 및 생활 교양",
+                subtitle: "ACADEMIC FOUNDATION",
+                desc: "읽고, 쓰고, 셈하며 세상과 소통하는 기초 체력을 기릅니다. 교과서 속 지식이 아닌 마트 영수증을 보고, 버스 노선을 확인하는 등 실생활 밀착형 교육을 실시합니다.",
+                image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80",
+                tags: ["문해력 교육", "생활 수학", "기초 영어", "미술 심리"],
+                color: "blue",
+                align: "left"
+            },
+            {
+                title: "바리스타 실무 및 서비스",
+                subtitle: "SERVICE SPECIALIST",
+                desc: "진한 커피 향기 속에 책임감을 담습니다. 기계 조작부터 메뉴 제조, 손님 응대 에티켓까지 실제 카페와 동일한 환경에서 전문 바리스타의 꿈을 키워갑니다.",
+                image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80",
+                tags: ["머신 조작", "위생 교육", "고객 응대", "재고 관리"],
+                color: "amber",
+                align: "right"
+            },
+            {
+                title: "디지털 리터러시 교육",
+                subtitle: "DIGITAL LITERACY",
+                desc: "키오스크 주문부터 스마트폰 앱 활용까지, 변화하는 세상에 적응할 수 있는 디지털 능력을 배웁니다. 정보의 바다에서 나만의 길을 찾는 방법을 익힙니다.",
+                image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80",
+                tags: ["키오스크 활용", "PC 기초", "사이버 에티켓", "사진 편집"],
+                color: "indigo",
+                align: "left"
+            }
+        ];
 
-        // 2. Logo Generation with Imagen API
-        async function generateLogo() {
-            const apiKey = ""; // Provided at runtime
-            const logoContainer = document.getElementById('logo-container');
-            const prompt = "A minimalist and warm logo icon for a special education vocational class, combining an open book, a coffee cup, and a gear, soft pastel blue and amber colors, clean white background, vector style";
-            
+        // --- Core Logic ---
+
+        // 1. Render Programs
+        const renderPrograms = () => {
+            const container = document.getElementById('program-list');
+            container.innerHTML = programs.map((p, idx) => `
+                <div class="reveal flex flex-col ${p.align === 'right' ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-12 lg:gap-24">
+                    <div class="lg:w-1/2 w-full">
+                        <div class="relative group">
+                            <div class="absolute -inset-4 bg-${p.color}-100 rounded-[3rem] -z-10 group-hover:inset-0 transition-all duration-500"></div>
+                            <img src="${p.image}" class="w-full aspect-[4/3] object-cover rounded-[2.5rem] shadow-2xl" alt="${p.title}">
+                            <div class="absolute bottom-6 right-6 px-6 py-3 bg-white/90 backdrop-blur rounded-2xl font-black text-${p.color}-600 shadow-xl border border-${p.color}-100">
+                                Step 0${idx + 1}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2 w-full">
+                        <span class="text-${p.color}-600 font-black text-sm tracking-[0.2em] mb-4 block">${p.subtitle}</span>
+                        <h3 class="text-3xl sm:text-4xl font-black text-slate-900 mb-6 leading-tight">${p.title}</h3>
+                        <p class="text-slate-500 text-lg leading-relaxed mb-10 font-medium">${p.desc}</p>
+                        <div class="flex flex-wrap gap-3">
+                            ${p.tags.map(tag => `
+                                <span class="px-5 py-2.5 bg-slate-50 border border-slate-100 rounded-full text-sm font-bold text-slate-600"># ${tag}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        // 2. Scroll Reveal Observer
+        const setupReveal = () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        };
+
+        // 3. Logo Generator (Imagen Fallback to SVG)
+        const generateLogo = async () => {
+            const apiKey = "";
+            const container = document.getElementById('logo-container');
+            const prompt = "A clean, friendly, minimalist vector logo for a special education vocational school, featuring an ocean wave and a growing plant, flat design, blue and white colors";
+
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
                     method: 'POST',
@@ -440,44 +338,49 @@
                         parameters: { sampleCount: 1 }
                     })
                 });
-                
-                const result = await response.json();
-                
-                if (result.predictions && result.predictions[0] && result.predictions[0].bytesBase64Encoded) {
-                    const base64Data = result.predictions[0].bytesBase64Encoded;
-                    logoContainer.innerHTML = `<img src="data:image/png;base64,${base64Data}" alt="수업 로고" class="w-full h-full object-cover">`;
+                const data = await response.json();
+                if (data.predictions?.[0]?.bytesBase64Encoded) {
+                    container.innerHTML = `<img src="data:image/png;base64,${data.predictions[0].bytesBase64Encoded}" class="w-full h-full object-cover">`;
                 } else {
-                    throw new Error('API response invalid');
+                    throw new Error();
                 }
-            } catch (error) {
-                console.error("Logo generation failed:", error);
-                // Fallback icon
-                logoContainer.innerHTML = `<i class="fa-solid fa-graduation-cap text-blue-600 text-xl"></i>`;
+            } catch (e) {
+                container.innerHTML = `<i class="fa-solid fa-water text-xl"></i>`;
             }
-        }
-
-        // 3. Contact Form Submission
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const originalText = btn.innerText;
-            
-            btn.innerText = "신청 중...";
-            btn.disabled = true;
-
-            // Simulate API call
-            setTimeout(() => {
-                alert("상담 신청이 완료되었습니다! 선화샘이 확인 후 연락드리겠습니다.");
-                btn.innerText = originalText;
-                btn.disabled = false;
-                e.target.reset();
-            }, 1500);
-        });
-
-        // Initialize
-        window.onload = function() {
-            generateLogo();
         };
+
+        // 4. Form Handling
+        const setupForm = () => {
+            const form = document.getElementById('contact-form');
+            const successMsg = document.getElementById('form-success');
+
+            form.onsubmit = (e) => {
+                e.preventDefault();
+                const btn = form.querySelector('button');
+                btn.disabled = true;
+                btn.innerHTML = `<div class="loader"></div>`;
+
+                // Simulate processing
+                setTimeout(() => {
+                    form.classList.add('hidden');
+                    successMsg.classList.remove('hidden');
+                }, 2000);
+            };
+        };
+
+        // Initialize Everything
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('year').textContent = new Date().getFullYear();
+            renderPrograms();
+            setupReveal();
+            setupForm();
+            generateLogo();
+
+            // Mobile Menu Simple Logic
+            document.getElementById('mobile-menu-btn').onclick = () => {
+                alert("모바일 메뉴는 데모 버전에서 준비 중입니다.");
+            };
+        });
     </script>
 </body>
 </html>
