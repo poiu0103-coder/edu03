@@ -32,15 +32,6 @@
             transform: translateY(0);
         }
 
-        .blob-animation {
-            animation: blob 10s infinite alternate;
-        }
-
-        @keyframes blob {
-            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-            100% { border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%; }
-        }
-
         .loader {
             border: 2px solid #f3f3f3;
             border-top: 2px solid var(--primary);
@@ -149,7 +140,7 @@
                         <i class="fa-solid fa-seedling"></i>
                     </div>
                     <h3 class="text-2xl font-black mb-4 tracking-tight">정서적 자립</h3>
-                    <p class="text-slate-500 leading-relaxed font-medium">기술 습단뿐만 아니라 타인과 소통하고 공감하는 능력을 길러 진정한 사회적 자립을 돕습니다.</p>
+                    <p class="text-slate-500 leading-relaxed font-medium">기술 습득뿐만 아니라 타인과 소통하고 공감하는 능력을 길러 진정한 사회적 자립을 돕습니다.</p>
                 </div>
             </div>
         </div>
@@ -212,26 +203,35 @@
                             <div class="grid sm:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">보호자 성함</label>
-                                    <input type="text" required name="name" class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl outline-none focus:border-blue-600 transition-all font-bold" placeholder="홍길동">
+                                    <input type="text" required name="name" id="field-name" class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl outline-none focus:border-blue-600 transition-all font-bold" placeholder="홍길동">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">연락처</label>
-                                    <input type="tel" required name="phone" class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl outline-none focus:border-blue-600 transition-all font-bold" placeholder="010-0000-0000">
+                                    <input type="tel" required name="phone" id="field-phone" class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl outline-none focus:border-blue-600 transition-all font-bold" placeholder="010-0000-0000">
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">상담 내용</label>
-                                <textarea rows="4" required name="message" class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl outline-none focus:border-blue-600 transition-all font-bold" placeholder="아이의 성장에 대해 궁금한 점을 적어주세요."></textarea>
+                                <textarea rows="4" required name="message" id="field-message" class="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl outline-none focus:border-blue-600 transition-all font-bold" placeholder="아이의 성장에 대해 궁금한 점을 적어주세요."></textarea>
                             </div>
-                            <button type="submit" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-3">
+                            <button type="submit" id="submit-btn" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-3">
                                 <span>상담 예약하기</span>
                                 <i class="fa-solid fa-paper-plane"></i>
                             </button>
                         </form>
+                        
                         <div id="form-success" class="hidden text-center py-10">
                             <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6"><i class="fa-solid fa-check"></i></div>
                             <h4 class="text-2xl font-black mb-2">신청이 완료되었습니다!</h4>
                             <p class="text-slate-500 font-medium">선화샘이 최대한 빨리 연락드리겠습니다.</p>
+                            <button onclick="resetForm()" class="mt-8 text-blue-600 font-bold underline">새로 신청하기</button>
+                        </div>
+
+                        <div id="form-error" class="hidden text-center py-10">
+                            <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6"><i class="fa-solid fa-exclamation"></i></div>
+                            <h4 class="text-2xl font-black mb-2">신청 중 오류가 발생했습니다.</h4>
+                            <p class="text-slate-500 font-medium">잠시 후 다시 시도하시거나 전화로 문의 부탁드립니다.</p>
+                            <button onclick="resetForm()" class="mt-8 px-6 py-2 bg-slate-200 rounded-xl font-bold">다시 시도</button>
                         </div>
                     </div>
                 </div>
@@ -255,7 +255,7 @@
                 title: "기초 교과 및 생활 교양",
                 subtitle: "ACADEMIC FOUNDATION",
                 desc: "읽고, 쓰고, 셈하며 세상과 소통하는 기초 체력을 기릅니다. 교과서 속 지식이 아닌 마트 영수증을 보고, 버스 노선을 확인하는 등 실생활 밀착형 교육을 실시합니다.",
-                image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80",
+                image: "https://images.unsplash.com/photo-1510172951991-856a654063f9?q=80&w=800&auto=format&fit=crop", // 귀여운 공부/책 일러스트
                 tags: ["문해력 교육", "생활 수학", "기초 영어", "미술 심리"],
                 color: "blue",
                 align: "left"
@@ -264,7 +264,7 @@
                 title: "바리스타 실무 및 서비스",
                 subtitle: "SERVICE SPECIALIST",
                 desc: "진한 커피 향기 속에 책임감을 담습니다. 기계 조작부터 메뉴 제조, 손님 응대 에티켓까지 실제 카페와 동일한 환경에서 전문 바리스타의 꿈을 키워갑니다.",
-                image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80",
+                image: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?q=80&w=800&auto=format&fit=crop", // 귀여운 커피/카페 일러스트
                 tags: ["머신 조작", "위생 교육", "고객 응대", "재고 관리"],
                 color: "amber",
                 align: "right"
@@ -273,7 +273,7 @@
                 title: "디지털 리터러시 교육",
                 subtitle: "DIGITAL LITERACY",
                 desc: "키오스크 주문부터 스마트폰 앱 활용까지, 변화하는 세상에 적응할 수 있는 디지털 능력을 배웁니다. 정보의 바다에서 나만의 길을 찾는 방법을 익힙니다.",
-                image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80",
+                image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=800&auto=format&fit=crop", // 밝고 따뜻한 기술/학습 일러스트
                 tags: ["키오스크 활용", "PC 기초", "사이버 에티켓", "사진 편집"],
                 color: "indigo",
                 align: "left"
@@ -323,7 +323,7 @@
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         };
 
-        // 3. Logo Generator (Imagen Fallback to SVG)
+        // 3. Logo Generator
         const generateLogo = async () => {
             const apiKey = "";
             const container = document.getElementById('logo-container');
@@ -349,23 +349,50 @@
             }
         };
 
-        // 4. Form Handling
+        // 4. Google App Script Form Submission
         const setupForm = () => {
             const form = document.getElementById('contact-form');
             const successMsg = document.getElementById('form-success');
+            const errorMsg = document.getElementById('form-error');
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwplAt1whc10anx3z1vNyooCxZKKbVVJ6HMPap7rdAOH7bQgDBssj1zOObXxQRv0UH4/exec';
 
-            form.onsubmit = (e) => {
+            form.onsubmit = async (e) => {
                 e.preventDefault();
-                const btn = form.querySelector('button');
+                const btn = document.getElementById('submit-btn');
                 btn.disabled = true;
                 btn.innerHTML = `<div class="loader"></div>`;
 
-                // Simulate processing
-                setTimeout(() => {
+                try {
+                    const response = await fetch(scriptURL, { 
+                        method: 'POST', 
+                        body: new FormData(form)
+                    });
+
                     form.classList.add('hidden');
                     successMsg.classList.remove('hidden');
-                }, 2000);
+                    console.log('Success!', response);
+                    
+                } catch (error) {
+                    console.error('Error!', error.message);
+                    form.classList.add('hidden');
+                    errorMsg.classList.remove('hidden');
+                }
             };
+        };
+
+        window.resetForm = () => {
+            const form = document.getElementById('contact-form');
+            const successMsg = document.getElementById('form-success');
+            const errorMsg = document.getElementById('form-error');
+            const btn = document.getElementById('submit-btn');
+
+            form.reset();
+            btn.disabled = false;
+            btn.innerHTML = `<span>상담 예약하기</span><i class="fa-solid fa-paper-plane"></i>`;
+            
+            form.classList.remove('hidden');
+            successMsg.classList.add('hidden');
+            errorMsg.classList.add('hidden');
         };
 
         // Initialize Everything
@@ -376,9 +403,8 @@
             setupForm();
             generateLogo();
 
-            // Mobile Menu Simple Logic
             document.getElementById('mobile-menu-btn').onclick = () => {
-                alert("모바일 메뉴는 데모 버전에서 준비 중입니다.");
+                alert("상단 메뉴는 현재 페이지 내 섹션 이동을 지원합니다.");
             };
         });
     </script>
